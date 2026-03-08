@@ -1,65 +1,67 @@
-// Homepage Login
-function login() {
-    let name = document.getElementById("username").value;
-    let pass = document.getElementById("passcode").value;
+// connect.html proceedConnection
+function proceedConnection() {
+    const sender = localStorage.getItem("waveXUser") || "Someone";
+    const name = document.getElementById("contact-name").value;
+    const type = document.getElementById("contact-type").value;
 
-    let pattern = /^[A-Za-z0-9]+$/;
+    const link = `${window.location.origin}/submit-email.html?user=${encodeURIComponent(sender)}`;
+    const message = `Hello,\n${sender} wants to connect privately.\nSubmit your email here: ${link}`;
 
-    if (!name || !pass) {
-        alert("Please fill in all fields.");
-        return;
-    }
-
-    if (!pattern.test(pass)) {
-        alert("Passcode must contain only letters and numbers.");
-        return;
-    }
-
-    // Store username for dashboard
-    localStorage.setItem("waveXUser", name);
-
-    // Redirect to connect page
-    window.location.href = "connect.html";
+    if(type === "whatsapp") window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
+    else if(type === "email") window.location.href = `mailto:?subject=Connect via WAVE X 🌊&body=${encodeURIComponent(message)}`;
+    else alert(`Send this manually to ${name}:\n\n${message}`);
 }
 
-// Connection Dashboard
-window.onload = function() {
-    let user = localStorage.getItem("waveXUser");
-    if (user) {
-        const userSpan = document.getElementById("user-name");
-        if (userSpan) userSpan.innerText = user;
-    }
+// submit-email.html submitEmail
+function submitEmail() {
+    const email = document.getElementById("contact-email").value;
+    const params = new URLSearchParams(window.location.search);
+    const sender = params.get("user") || "Someone";
+    if(!email) { alert("Enter email!"); return; }
+
+    const db = firebase.firestore();
+    db.collection("connections").add({sender: sender, email: email, timestamp: Date.now()})
+      .then(() => {
+          document.getElementById("confirmation").innerHTML = `Thank you! Redirecting to chat...`;
+          setTimeout(() => { window.location.href = `secret-box.html?user=${encodeURIComponent(sender)}`; }, 2000);
+      });
+}
+
+// secret-box.html real-time chat
+window.onload = () => {
+    const params = new URLSearchParams(window.location.search);
+    const sender = params.get("user") || "Someone";
+    document.getElementById("chat-header").innerText = `Secret Conversation with ${sender}`;
+
+    const db = firebase.firestore();
+    const chatBox = document.getElementById("chat-box");
+
+    db.collection("messages")
+      .where("conversationWith","==",sender)
+      .orderBy("timestamp")
+      .onSnapshot(snapshot => {
+        chatBox.innerHTML = "";
+        snapshot.forEach(doc => {
+          const msg = doc.data();
+          const div = document.createElement("div");
+          div.className = msg.sender===localStorage.getItem("waveXUser")?"msg sender":"msg recipient";
+          div.innerText = msg.content;
+          chatBox.appendChild(div);
+        });
+        chatBox.scrollTop = chatBox.scrollHeight;
+      });
 };
 
-function selectContact(type) {
-    let contactName = prompt(`Enter the name of the ${type} contact:`);
-
-    if (!contactName) return;
-
-    let contactDiv = document.getElementById("contact-selection");
-    contactDiv.innerHTML = `
-        <p>You selected: <strong>${contactName}</strong></p>
-        <p>Do you wish to connect with <strong>${contactName}</strong>?</p>
-        <button onclick="cancelSelection()">Cancel</button>
-        <button onclick="proceedConnection('${type}', '${contactName}')">Proceed</button>
-    `;
-}
-
-function cancelSelection() {
-    document.getElementById("contact-selection").innerHTML = "";
-}
-
-function proceedConnection(type, name) {
+function sendMessage() {
+    const msg = document.getElementById("chat-message").value;
+    if(!msg) return;
     const sender = localStorage.getItem("waveXUser") || "Someone";
-    const link = `https://eemmpatech-empire.github.io/submit-email.html?user=${encodeURIComponent(sender)}`;
+    const params = new URLSearchParams(window.location.search);
+    const conversationWith = params.get("user");
 
-    const message = `Hello,\n\n${sender} wants to connect privately with you through WAVE X 🌊.\n\nPlease submit your email using this link to start a private conversation:\n${link}`;
-
-    if (type === "whatsapp") {
-        window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
-    } else if (type === "email") {
-        window.location.href = `mailto:?subject=Connect via WAVE X 🌊&body=${encodeURIComponent(message)}`;
-    } else if (type === "phone") {
-        alert(`Send this message to ${name} via SMS:\n\n${message}`);
-    }
+    const db = firebase.firestore();
+    db.collection("messages").add({
+        sender, conversationWith, content: msg, timestamp: Date.now()
+    });
+    document.getElementById("chat-message").value = "";
 }
