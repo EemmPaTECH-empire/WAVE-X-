@@ -202,6 +202,14 @@ body {
   border-top:1px solid #9D00FF;
 }
 
+/* Footer Logo Adjustment */
+.footer-logo {
+    width: 20px;        
+    height: auto;      
+    vertical-align: middle;
+    margin-left: 5px;   
+}
+
 /* RESPONSIVE */
 @media (max-width:768px){
   .dashboard, .chat-box, .login-card{
