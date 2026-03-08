@@ -30,7 +30,7 @@ function proceedConnection(type) {
     const name = nameInput.value;
 
     const link = `${window.location.origin}/submit-email.html?user=${encodeURIComponent(sender)}`;
-    const message = `Hello,\n${sender} wants to connect privately.\nSubmit your email here: ${link}`;
+    const message = `Hello,\n${sender} wants to connect privately with you through WAVE X 🌊.\nSubmit your email here: ${link}`;
 
     if(type === "whatsapp") window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
     else if(type === "email") window.location.href = `mailto:?subject=Connect via WAVE X 🌊&body=${encodeURIComponent(message)}`;
