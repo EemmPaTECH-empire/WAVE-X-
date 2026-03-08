@@ -1,0 +1,217 @@
+/* RESET */
+* {
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* BODY */
+body {
+  background-color: #0c0c0c;
+  color: #FFD700;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* HERO / INDEX */
+.hero {
+  text-align:center;
+  padding:50px 20px;
+}
+.site-title {
+  font-size:4rem;
+  color:#9D00FF;
+  text-shadow:0 0 10px #9D00FF,0 0 20px #FFD700;
+  margin-bottom:20px;
+}
+.welcome-text {
+  font-size:1.2rem;
+  max-width:700px;
+  margin:0 auto 40px auto;
+  line-height:1.5;
+}
+.highlight {
+  color:#FFD700;
+  font-weight:bold;
+}
+
+/* LOGIN CARD */
+.login-card {
+  display:inline-block;
+  background:rgba(20,20,20,0.85);
+  padding:30px 40px;
+  border-radius:15px;
+  border:1px solid #9D00FF;
+  box-shadow:0 0 20px #9D00FF;
+}
+.login-card input {
+  display:block;
+  width:100%;
+  margin:10px 0;
+  padding:12px;
+  border-radius:8px;
+  border:none;
+  outline:none;
+  font-size:1rem;
+  background:#111;
+  color:#fff;
+}
+.login-card button {
+  width:100%;
+  padding:12px;
+  margin-top:15px;
+  font-size:1rem;
+  font-weight:bold;
+  background-color:#FFD700;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  transition:0.3s;
+}
+.login-card button:hover {
+  box-shadow:0 0 15px #9D00FF,0 0 25px #FFD700;
+  transform:scale(1.05);
+}
+
+/* DASHBOARD */
+.dashboard {
+  max-width:600px;
+  margin:50px auto;
+  padding:30px 20px;
+  text-align:center;
+}
+.dashboard h2{
+  margin-bottom:10px;
+}
+.contact-buttons {
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+  margin-top:20px;
+}
+.contact-buttons button {
+  background:rgba(20,20,20,0.85);
+  border:1px solid #9D00FF;
+  padding:15px;
+  font-size:16px;
+  border-radius:10px;
+  cursor:pointer;
+  color:#FFD700;
+  transition:0.3s;
+  box-shadow:0 2px 5px #9D00FF;
+}
+.contact-buttons button:hover{
+  background:#9D00FF;
+  color:#fff;
+  border-color:#FFD700;
+  transform:translateY(-2px);
+}
+.contact-selection{
+  margin-top:30px;
+  padding:20px;
+  background:rgba(15,15,15,0.85);
+  border-radius:10px;
+  box-shadow:0 2px 8px #9D00FF;
+}
+
+/* CHAT BOX */
+.chat-box{
+  max-width:600px;
+  margin:50px auto;
+  background:#111;
+  border-radius:15px;
+  display:flex;
+  flex-direction:column;
+  height:80vh;
+}
+.chat-header{
+  padding:15px;
+  border-bottom:1px solid #9D00FF;
+  text-align:center;
+}
+.messages{
+  flex:1;
+  padding:15px;
+  overflow-y:auto;
+}
+.message {
+  max-width:70%;
+  padding:10px 15px;
+  border-radius:12px;
+  margin-bottom:10px;
+  word-wrap:break-word;
+}
+.sent {
+  background:#FFD700;
+  color:#000;
+  margin-left:auto;
+}
+.received {
+  background:#9D00FF;
+  color:#fff;
+  margin-right:auto;
+}
+.chat-input{
+  display:flex;
+  padding:10px;
+  border-top:1px solid #9D00FF;
+}
+.chat-input input{
+  flex:1;
+  padding:10px;
+  border-radius:8px;
+  border:none;
+  outline:none;
+  margin-right:10px;
+  background:#222;
+  color:#fff;
+}
+.chat-input button{
+  padding:10px 20px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  background:#FFD700;
+  color:#000;
+  font-weight:bold;
+}
+.chat-input button:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 10px #9D00FF,0 0 15px #FFD700;
+}
+
+/* FOOTERS */
+.full-footer{
+  margin-top:auto;
+  text-align:center;
+  padding:20px;
+  font-size:14px;
+  color:#FFD700;
+}
+.full-footer a{
+  color:#9D00FF;
+}
+.minimal-footer{
+  margin-top:auto;
+  text-align:center;
+  padding:15px;
+  font-size:14px;
+  color:#FFD700;
+  border-top:1px solid #9D00FF;
+}
+
+/* RESPONSIVE */
+@media (max-width:768px){
+  .dashboard, .chat-box, .login-card{
+    width:90%;
+  }
+  .site-title{
+    font-size:3rem;
+  }
+  .contact-buttons button{
+    font-size:15px;
+    padding:12px;
+  }
+}
