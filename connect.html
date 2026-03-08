@@ -1,38 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WAVE X 🌊 - Connect</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WAVE X 🌊 - Connect</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
 </head>
 <body>
+<header class="hero">
+    <h1 class="site-title">WAVE X 🌊</h1>
+    <p class="welcome-text">Select contact and send an invite to connect privately.</p>
 
-    <main class="dashboard">
-        <h2>Welcome, <span id="user-name">User</span></h2>
-        <p>Select how you want to connect:</p>
+    <div class="contact-card">
+        <input type="text" id="contact-name" placeholder="Contact Name">
+        <select id="contact-type">
+            <option value="whatsapp">WhatsApp</option>
+            <option value="email">Email</option>
+            <option value="phone">Phone</option>
+        </select>
+        <button onclick="proceedConnection()">Proceed</button>
+    </div>
+</header>
 
-        <div class="contact-buttons">
-            <button onclick="selectContact('phone')">📞 Phone Contact</button>
-            <button onclick="selectContact('whatsapp')">💬 WhatsApp Contact</button>
-            <button onclick="selectContact('email')">✉ Email Contact</button>
-        </div>
+<footer>
+    <p>EemmPaTECH Empire</p>
+    <p>Powered by BMT Mobile <img src="images/bmt-logo.png" alt="BMT Logo" class="footer-logo"></p>
+    <p>Contact: <a href="mailto:eemmpatech@gmail.com">eemmpatech@gmail.com</a></p>
+    <p>All Rights Reserved 2026</p>
+</footer>
 
-        <div class="contact-selection" id="contact-selection">
-            <!-- Contact name and confirmation will appear here -->
-        </div>
-    </main>
-
-    <footer>
-        <p>EemmPaTECH Empire</p>
-        <p>
-            Powered by BMT Mobile 
-            <img src="images/bmt-logo.png" alt="BMT Logo" class="footer-logo">
-        </p>
-        <p>Contact for our service: <a href="mailto:eemmpatech@gmail.com">eemmpatech@gmail.com</a></p>
-        <p>All Rights Reserved 2026</p>
-    </footer>
-
-    <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
