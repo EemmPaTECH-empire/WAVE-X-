@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WAVE X 🌊 - Connect</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <main class="dashboard">
+        <h2>Welcome, <span id="user-name">User</span></h2>
+        <p>Select how you want to connect:</p>
+
+        <div class="contact-buttons">
+            <button onclick="selectContact('phone')">📞 Phone Contact</button>
+            <button onclick="selectContact('whatsapp')">💬 WhatsApp Contact</button>
+            <button onclick="selectContact('email')">✉ Email Contact</button>
+        </div>
+
+        <div class="contact-selection" id="contact-selection">
+            <!-- Contact name and confirmation will appear here -->
+        </div>
+    </main>
+
+    <footer>
+        <p>EemmPaTECH Empire</p>
+        <p>
+            Powered by BMT Mobile 
+            <img src="images/bmt-logo.png" alt="BMT Logo" class="footer-logo">
+        </p>
+        <p>Contact for our service: <a href="mailto:eemmpatech@gmail.com">eemmpatech@gmail.com</a></p>
+        <p>All Rights Reserved 2026</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
