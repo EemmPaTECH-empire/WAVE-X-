@@ -1,8 +1,33 @@
-// connect.html proceedConnection
-function proceedConnection() {
-    const sender = localStorage.getItem("waveXUser") || "Someone";
-    const name = document.getElementById("contact-name").value;
-    const type = document.getElementById("contact-type").value;
+// Display logged in user
+document.addEventListener("DOMContentLoaded", () => {
+    const user = localStorage.getItem("waveXUser") || "User";
+    const userNameSpan = document.getElementById("user-name");
+    if(userNameSpan) userNameSpan.textContent = user;
+
+    // Initialize chat if chat box exists
+    const chatBox = document.getElementById("chat-box");
+    if(chatBox) initChat();
+});
+
+// Connect page contact selection
+function selectContact(type) {
+    const selectionDiv = document.getElementById("contact-selection");
+    selectionDiv.innerHTML = ""; // Clear previous content
+    const user = localStorage.getItem("waveXUser") || "User";
+    let html = `
+        <p>You selected <strong>${type.toUpperCase()}</strong>.</p>
+        <input type="text" id="contact-name" placeholder="Enter contact name">
+        <button onclick="proceedConnection('${type}')">Proceed</button>
+    `;
+    selectionDiv.innerHTML = html;
+}
+
+// Proceed button logic
+function proceedConnection(type) {
+    const sender = localStorage.getItem("waveXUser") || "User";
+    const nameInput = document.getElementById("contact-name");
+    if(!nameInput || !nameInput.value) { alert("Enter contact name!"); return; }
+    const name = nameInput.value;
 
     const link = `${window.location.origin}/submit-email.html?user=${encodeURIComponent(sender)}`;
     const message = `Hello,\n${sender} wants to connect privately.\nSubmit your email here: ${link}`;
@@ -12,25 +37,30 @@ function proceedConnection() {
     else alert(`Send this manually to ${name}:\n\n${message}`);
 }
 
-// submit-email.html submitEmail
+// Submit email page
 function submitEmail() {
     const email = document.getElementById("contact-email").value;
     const params = new URLSearchParams(window.location.search);
-    const sender = params.get("user") || "Someone";
+    const sender = params.get("user") || "User";
     if(!email) { alert("Enter email!"); return; }
 
     const db = firebase.firestore();
-    db.collection("connections").add({sender: sender, email: email, timestamp: Date.now()})
-      .then(() => {
-          document.getElementById("confirmation").innerHTML = `Thank you! Redirecting to chat...`;
-          setTimeout(() => { window.location.href = `secret-box.html?user=${encodeURIComponent(sender)}`; }, 2000);
-      });
+    db.collection("connections").add({
+        sender: sender,
+        email: email,
+        timestamp: Date.now()
+    }).then(() => {
+        document.getElementById("confirmation").innerText = "Thank you! Redirecting to chat...";
+        setTimeout(() => {
+            window.location.href = `secret-box.html?user=${encodeURIComponent(sender)}`;
+        }, 2000);
+    });
 }
 
-// secret-box.html real-time chat
-window.onload = () => {
+// Chat box initialization
+function initChat() {
     const params = new URLSearchParams(window.location.search);
-    const sender = params.get("user") || "Someone";
+    const sender = params.get("user") || "User";
     document.getElementById("chat-header").innerText = `Secret Conversation with ${sender}`;
 
     const db = firebase.firestore();
@@ -42,20 +72,22 @@ window.onload = () => {
       .onSnapshot(snapshot => {
         chatBox.innerHTML = "";
         snapshot.forEach(doc => {
-          const msg = doc.data();
-          const div = document.createElement("div");
-          div.className = msg.sender===localStorage.getItem("waveXUser")?"msg sender":"msg recipient";
-          div.innerText = msg.content;
-          chatBox.appendChild(div);
+            const msg = doc.data();
+            const div = document.createElement("div");
+            div.className = msg.sender===localStorage.getItem("waveXUser")?"msg sender":"msg recipient";
+            div.innerText = msg.content;
+            chatBox.appendChild(div);
         });
         chatBox.scrollTop = chatBox.scrollHeight;
       });
-};
+}
 
+// Send chat message
 function sendMessage() {
-    const msg = document.getElementById("chat-message").value;
-    if(!msg) return;
-    const sender = localStorage.getItem("waveXUser") || "Someone";
+    const msgInput = document.getElementById("chat-message");
+    if(!msgInput.value) return;
+    const msg = msgInput.value;
+    const sender = localStorage.getItem("waveXUser") || "User";
     const params = new URLSearchParams(window.location.search);
     const conversationWith = params.get("user");
 
@@ -63,5 +95,9 @@ function sendMessage() {
     db.collection("messages").add({
         sender, conversationWith, content: msg, timestamp: Date.now()
     });
-    document.getElementById("chat-message").value = "";
+    msgInput.value = "";
 }
+
+// Placeholder functions for media/audio
+function uploadMedia(){ alert("Media upload coming soon!"); }
+function recordAudio(){ alert("Audio recording coming soon!"); }
