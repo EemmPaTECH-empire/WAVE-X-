@@ -1,59 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WAVE X 🌊 - Submit Email</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Submit Email</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
 </head>
 <body>
+<header class="hero">
+    <h1 class="site-title">WAVE X 🌊</h1>
+    <p class="welcome-text">Submit your email to start a private conversation.</p>
 
-    <header class="hero">
-        <h1 class="site-title">WAVE X 🌊</h1>
-        <p class="welcome-text">Enter your email below to connect privately.</p>
+    <div class="login-card">
+        <input type="email" id="contact-email" placeholder="Enter your email">
+        <button onclick="submitEmail()">Submit</button>
+    </div>
 
-        <div class="login-card">
-            <input type="email" id="contact-email" placeholder="Enter your email">
-            <button onclick="submitEmail()">Submit</button>
-        </div>
+    <p id="confirmation"></p>
+</header>
 
-        <p id="confirmation" style="margin-top:20px;"></p>
-    </header>
+<footer>
+    <p>EemmPaTECH Empire</p>
+    <p>Powered by BMT Mobile <img src="images/bmt-logo.png" alt="BMT Logo" class="footer-logo"></p>
+    <p>Contact: <a href="mailto:eemmpatech@gmail.com">eemmpatech@gmail.com</a></p>
+    <p>All Rights Reserved 2026</p>
+</footer>
 
-    <footer>
-        <p>EemmPaTECH Empire</p>
-        <p>
-            Powered by BMT Mobile 
-            <img src="images/bmt-logo.png" alt="BMT Logo" class="footer-logo">
-        </p>
-        <p>Contact for our service: <a href="mailto:eemmpatech@gmail.com">eemmpatech@gmail.com</a></p>
-        <p>All Rights Reserved 2026</p>
-    </footer>
-
-    <script>
-        function submitEmail() {
-            const email = document.getElementById("contact-email").value;
-            const params = new URLSearchParams(window.location.search);
-            const sender = params.get("user");
-
-            if (!email) {
-                alert("Please enter your email!");
-                return;
-            }
-
-            // Store email locally
-            let submittedEmails = JSON.parse(localStorage.getItem("submittedEmails") || "[]");
-            submittedEmails.push({sender: sender, email: email});
-            localStorage.setItem("submittedEmails", JSON.stringify(submittedEmails));
-
-            document.getElementById("confirmation").innerHTML = `
-                Thank you! Your email has been sent to <strong>${sender}</strong>.
-            `;
-
-            document.getElementById("contact-email").disabled = true;
-        }
-    </script>
-
+<script src="script.js"></script>
 </body>
 </html>
-
