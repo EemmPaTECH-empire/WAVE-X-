@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WAVE X 🌊 - Welcome</title>
+<title>WAVE X 🌊</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,35 +12,28 @@
 <header class="hero">
     <h1 class="site-title">WAVE X 🌊</h1>
     <p class="welcome-text">
-        Welcome to WAVE X 🌊 – the best private messaging platform. Connect with loved ones or anyone in the world securely and privately.
+        Welcome to <strong>WAVE X 🌊</strong> — the most secure platform to privately connect with friends, loved ones, or anyone in the world.
+        Simply choose your contact method and start a <span class="highlight">private connection instantly</span>.
     </p>
 
     <div class="login-card">
-        <input type="text" id="username" placeholder="Enter your name">
-        <input type="password" id="passcode" placeholder="Enter numeric passcode">
-        <button onclick="login()">Enter WAVE X 🌊</button>
+        <h2>SIGN IN</h2>
+        <input type="text" id="username" placeholder="Enter Your Name">
+        <input type="password" id="passcode" placeholder="Enter Passcode (letters & numbers)">
+        <button onclick="login()">CONNECT</button>
     </div>
 </header>
 
 <footer>
     <p>EemmPaTECH Empire</p>
-    <p>Powered by BMT Mobile <img src="images/bmt-logo.png" alt="BMT Logo" class="footer-logo"></p>
-    <p>Contact: <a href="mailto:eemmpatech@gmail.com">eemmpatech@gmail.com</a></p>
+    <p>
+        Powered by BMT Mobile 
+        <img src="images/bmt-logo.png" alt="BMT Logo" class="footer-logo">
+    </p>
+    <p>Contact for our service: <a href="mailto:eemmpatech@gmail.com">eemmpatech@gmail.com</a></p>
     <p>All Rights Reserved 2026</p>
 </footer>
 
-<script>
-function login() {
-    const name = document.getElementById("username").value;
-    const passcode = document.getElementById("passcode").value;
-    if(!name || !passcode || !/^[a-zA-Z0-9]+$/.test(passcode)){
-        alert("Enter a valid name and alphanumeric passcode!");
-        return;
-    }
-    localStorage.setItem("waveXUser", name);
-    window.location.href = "connect.html";
-}
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
