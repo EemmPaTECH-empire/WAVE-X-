@@ -1,134 +1,166 @@
-/* Global */
-body {
+/* ------------------ Global ------------------ */
+* {
     margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #050505;
-    color: #FFD700;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Hero / Homepage */
+body {
+    background-color: #000;
+    color: #fff;
+    line-height: 1.6;
+}
+
+a {
+    color: #fcd34d; /* Gold */
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* ------------------ Hero / Header ------------------ */
 .hero {
     text-align: center;
-    padding: 50px 20px;
+    padding: 40px 20px;
 }
 
 .site-title {
-    font-size: 4rem;
-    color: #9D00FF;
-    text-shadow: 0 0 10px #9D00FF, 0 0 20px #FFD700, 0 0 30px #9D00FF;
-    margin: 0 0 20px 0;
+    font-size: 3rem;
+    color: #9d4edd; /* Purple neon */
+    text-shadow: 0 0 10px #9d4edd, 0 0 20px #fcd34d;
 }
 
 .welcome-text {
     font-size: 1.2rem;
-    max-width: 700px;
-    margin: 0 auto 40px auto;
-    line-height: 1.5;
+    margin: 15px 0 30px 0;
+    color: #fcd34d;
 }
 
-.highlight {
-    color: #FFD700;
-    font-weight: bold;
-}
-
-/* Login Card */
-.login-card {
+/* ------------------ Login & Contact Cards ------------------ */
+.login-card, .contact-card {
     display: inline-block;
-    background: rgba(20,20,20,0.8);
-    padding: 30px 40px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 20px 30px;
     border-radius: 15px;
-    border: 1px solid #9D00FF;
-    box-shadow: 0 0 20px #9D00FF;
+    box-shadow: 0 0 20px rgba(157, 78, 221, 0.7);
+    backdrop-filter: blur(5px);
 }
 
-.login-card input {
+.login-card input, .contact-card input, .contact-card select {
     display: block;
     width: 100%;
     margin: 10px 0;
-    padding: 12px;
+    padding: 10px 15px;
     border-radius: 8px;
     border: none;
     outline: none;
-    font-size: 1rem;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
 }
 
-.login-card button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 15px;
-    font-size: 1rem;
-    font-weight: bold;
-    background-color: #FFD700;
+button {
+    padding: 10px 20px;
+    margin-top: 10px;
     border: none;
     border-radius: 8px;
+    background: #fcd34d;
+    color: #000;
+    font-weight: bold;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease-in-out;
 }
 
-.login-card button:hover {
-    box-shadow: 0 0 15px #9D00FF, 0 0 25px #FFD700;
+button:hover {
     transform: scale(1.05);
+    box-shadow: 0 0 20px #fcd34d;
 }
 
-/* Dashboard */
-.dashboard {
-    text-align: center;
-    padding: 50px 20px;
-}
-
-.contact-buttons button {
-    margin: 10px;
-    padding: 15px 25px;
-    font-size: 1.1rem;
-    border: 1px solid #9D00FF;
-    border-radius: 10px;
-    background: rgba(20,20,20,0.8);
-    color: #FFD700;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.contact-buttons button:hover {
-    box-shadow: 0 0 15px #9D00FF, 0 0 25px #FFD700;
-    transform: scale(1.05);
-}
-
-/* Footer */
+/* ------------------ Footer ------------------ */
 footer {
     text-align: center;
-    padding: 20px;
-    background-color: #050505;
-    color: #FFD700;
     margin-top: 50px;
+    padding: 20px;
+    font-size: 0.9rem;
+    color: #aaa;
+    border-top: 1px solid rgba(255,255,255,0.1);
 }
 
 .footer-logo {
-    width: 25px;
+    width: 30px;
     vertical-align: middle;
     margin-left: 5px;
 }
 
-footer a {
-    color: #9D00FF;
-    text-decoration: none;
+/* ------------------ Chat Box ------------------ */
+.chat-box {
+    width: 90%;
+    max-width: 800px;
+    height: 400px;
+    margin: 20px auto;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 15px;
+    overflow-y: scroll;
+    box-shadow: 0 0 20px rgba(157,78,221,0.7);
 }
 
-footer a:hover {
-    text-decoration: underline;
+.msg {
+    padding: 10px 15px;
+    margin: 8px 0;
+    border-radius: 15px;
+    max-width: 70%;
+    word-wrap: break-word;
 }
 
-/* Responsive */
+.msg.sender {
+    background: #fcd34d;
+    color: #000;
+    margin-left: auto;
+    text-align: right;
+}
+
+.msg.recipient {
+    background: #9d4edd;
+    color: #fff;
+    margin-right: auto;
+    text-align: left;
+}
+
+.chat-input {
+    width: 90%;
+    max-width: 800px;
+    margin: 10px auto 50px auto;
+    display: flex;
+    gap: 10px;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 15px;
+    border: none;
+    outline: none;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+}
+
+.chat-input button {
+    border-radius: 15px;
+    padding: 0 15px;
+}
+
+/* ------------------ Responsive ------------------ */
 @media (max-width: 768px) {
     .site-title {
-        font-size: 3rem;
+        font-size: 2.2rem;
     }
-
-    .login-card {
-        width: 90%;
+    .chat-box {
+        height: 300px;
     }
-
-    .contact-buttons button {
-        width: 90%;
-        margin: 10px 0;
+    .chat-input {
+        flex-direction: column;
     }
 }
