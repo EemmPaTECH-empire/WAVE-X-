@@ -27,16 +27,14 @@ function login() {
 }
 
 // ======================
-// DASHBOARD (connect.html)
+// DASHBOARD LOAD
 // ======================
 window.onload = function () {
     const user = localStorage.getItem("waveXUser");
-    if (user) {
-        const el = document.getElementById("user-name");
-        if (el) el.innerText = user;
-    }
+    const el = document.getElementById("user-name");
+    if (el && user) el.innerText = user;
 
-    // Initialize chat listener only if messages container exists
+    // Initialize chat only if messages container exists
     if (document.getElementById("messages")) {
         initChatListener();
     }
@@ -87,13 +85,16 @@ function proceedConnection(type, name) {
 }
 
 // ======================
-// SUBMIT EMAIL (submit-email.html)
+// SUBMIT EMAIL
 // ======================
 function submitEmail() {
     const emailInput = document.getElementById("user-email");
     const email = emailInput.value.trim();
-    const user = new URLSearchParams(window.location.search).get("user") || "Anonymous";
-    const contact = new URLSearchParams(window.location.search).get("contact") || "Unknown";
+
+    // Use URL params only on submit-email.html
+    const urlParams = new URLSearchParams(window.location.search);
+    const user = urlParams.get("user") || localStorage.getItem("waveXUser") || "Anonymous";
+    const contact = urlParams.get("contact") || "Unknown";
 
     if (!email) {
         alert("Enter your email.");
@@ -117,13 +118,15 @@ function submitEmail() {
 }
 
 // ======================
-// CHAT FUNCTIONS (secret-box.html)
+// CHAT FUNCTIONS
 // ======================
 function initChatListener() {
     const messagesContainer = document.getElementById("messages");
-    const user = new URLSearchParams(window.location.search).get("user") || localStorage.getItem("waveXUser") || "Anonymous";
 
-    // Listen for new messages in real-time
+    // Use URL param if exists, otherwise localStorage
+    const urlParams = new URLSearchParams(window.location.search);
+    const user = urlParams.get("user") || localStorage.getItem("waveXUser") || "Anonymous";
+
     db.collection("messages").orderBy("timestamp")
         .onSnapshot(snapshot => {
             messagesContainer.innerHTML = "";
@@ -138,13 +141,13 @@ function initChatListener() {
         });
 }
 
-// SEND MESSAGE
 function sendMessage() {
     const input = document.getElementById("chat-message");
     const text = input.value.trim();
-    const user = new URLSearchParams(window.location.search).get("user") || localStorage.getItem("waveXUser") || "Anonymous";
-
     if (!text) return;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const user = urlParams.get("user") || localStorage.getItem("waveXUser") || "Anonymous";
 
     db.collection("messages").add({
         sender: user,
