@@ -1,30 +1,71 @@
-// ====== LOGIN ======
+
+// ======================
+// Firebase Initialization
+// ======================
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+import { getFirestore, collection, addDoc, query, where, onSnapshot, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js";
+
+// Your Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyCh0t_yRYsMUyNbgTFofibsJKEQz-bHIqE",
+  authDomain: "wavex-chat.firebaseapp.com",
+  projectId: "wavex-chat",
+  storageBucket: "wavex-chat.firebasestorage.app",
+  messagingSenderId: "674774241938",
+  appId: "1:674774241938:web:60dcecf424dd6d154dcc4b"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+// ======================
+// LOGIN / SIGNUP (INDEX)
+// ======================
 function login() {
-  const name = document.getElementById("username").value;
-  const pass = document.getElementById("passcode").value;
+  const emailInput = document.getElementById("username").value;
+  const passInput = document.getElementById("passcode").value;
+
+  if (!emailInput || !passInput) {
+    alert("Please fill all fields.");
+    return;
+  }
+
   const pattern = /^[A-Za-z0-9]+$/;
+  if (!pattern.test(passInput)) {
+    alert("Passcode must contain letters & numbers only.");
+    return;
+  }
 
-  if (!name || !pass) { alert("Please fill all fields."); return; }
-  if (!pattern.test(pass)) { alert("Passcode must contain letters & numbers only."); return; }
-
-  // Save user and generate a unique sessionId
-  const sessionId = 'session-' + Date.now() + '-' + Math.floor(Math.random() * 10000);
-  localStorage.setItem("waveXUser", name);
-  localStorage.setItem("waveXSession", sessionId);
-
-  window.location.href = "connect.html";
+  // Firebase Auth: Try sign in, if fails, create user
+  signInWithEmailAndPassword(auth, emailInput + "@wavex.com", passInput)
+    .then(userCredential => {
+      localStorage.setItem("waveXUser", userCredential.user.uid);
+      window.location.href = "connect.html";
+    })
+    .catch(error => {
+      // User not found → create account
+      createUserWithEmailAndPassword(auth, emailInput + "@wavex.com", passInput)
+        .then(userCredential => {
+          localStorage.setItem("waveXUser", userCredential.user.uid);
+          window.location.href = "connect.html";
+        })
+        .catch(err => alert(err.message));
+    });
 }
 
-// ====== DASHBOARD LOAD ======
-window.onload = function() {
-  const user = localStorage.getItem("waveXUser");
-  if (user) {
+// ======================
+// DASHBOARD / CONNECT PAGE
+// ======================
+window.onload = function () {
+  const userName = localStorage.getItem("waveXUser");
+  if (userName) {
     const el = document.getElementById("user-name");
-    if (el) el.innerText = user;
+    if (el) el.innerText = userName;
   }
 };
 
-// ====== SELECT CONTACT ======
 function selectContact(type) {
   const contactName = prompt(`Enter the name of the ${type} contact:`);
   if (!contactName) return;
@@ -42,83 +83,85 @@ function cancelSelection() {
   document.getElementById("contact-selection").innerHTML = "";
 }
 
-// ====== PROCEED CONNECTION ======
-function proceedConnection(type, name) {
-  const sessionId = localStorage.getItem("waveXSession");
-  const user = localStorage.getItem("waveXUser") || "Anonymous";
-
-  // Create a session-specific link to submit email (secret conversation)
-  const secretLink = `${window.location.origin}/submit-email.html?sessionId=${sessionId}&user=${encodeURIComponent(user)}`;
-
-  const message = `Hello,\nSomeone wants to connect privately via WAVE X 🌊.\nPlease submit your email using this link to start a private conversation:\n${secretLink}`;
+function proceedConnection(type, contactName) {
+  const userId = localStorage.getItem("waveXUser");
+  const link = `${window.location.origin}/submit-email.html?user=${encodeURIComponent(contactName)}&senderId=${userId}`;
+  const message = `Hello ${contactName},\nSomeone wants to connect privately via WAVE X 🌊.\nClick here to start the conversation: ${link}`;
 
   if (type === "whatsapp") {
     window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
   } else if (type === "email") {
     window.location.href = `mailto:?subject=Connect via WAVE X 🌊&body=${encodeURIComponent(message)}`;
   } else if (type === "phone") {
-    alert(`Send this message to ${name} via SMS:\n\n${message}`);
+    alert(`Send this message to ${contactName} via SMS:\n\n${message}`);
   }
 }
 
-// ====== SUBMIT EMAIL ======
-function submitEmail() {
-  const email = document.getElementById("user-email").value;
-  if (!email) { alert("Enter your email."); return; }
+// ======================
+// SUBMIT EMAIL PAGE
+// ======================
+async function submitEmail() {
+  const emailInput = document.getElementById("user-email").value;
+  const senderId = new URLSearchParams(window.location.search).get("senderId");
 
-  const sessionId = new URLSearchParams(window.location.search).get("sessionId");
-  const user = new URLSearchParams(window.location.search).get("user");
+  if (!emailInput) {
+    alert("Enter your email.");
+    return;
+  }
 
-  db.collection("emails").add({
-    email: email,
-    sessionId: sessionId,
-    userName: user,
-    timestamp: new Date()
-  })
-    .then(() => { 
-      alert("Email submitted!"); 
-      window.location.href = `secret-box.html?sessionId=${sessionId}&user=${encodeURIComponent(user)}`; 
-    })
-    .catch(err => { console.error(err); alert("Error saving email."); });
+  try {
+    await addDoc(collection(db, "emails"), {
+      email: emailInput,
+      userId: auth.currentUser.uid,
+      senderId: senderId,
+      timestamp: new Date()
+    });
+    alert("Email submitted!");
+    window.location.href = `secret-box.html?conversation=${senderId}-${auth.currentUser.uid}`;
+  } catch (err) {
+    console.error(err);
+    alert("Error submitting email.");
+  }
 }
 
-// ====== CHAT FUNCTIONS ======
-function sendMessage() {
+// ======================
+// SECRET CHAT BOX
+// ======================
+const messagesContainer = document.getElementById("messages");
+const conversationId = new URLSearchParams(window.location.search).get("conversation");
+
+async function sendMessage() {
   const input = document.getElementById("chat-message");
   const text = input.value.trim();
   if (!text) return;
 
-  const sessionId = new URLSearchParams(window.location.search).get("sessionId");
-  const user = localStorage.getItem("waveXUser") || "Anonymous";
-
-  db.collection("messages").add({
-    sender: user,
-    text: text,
-    sessionId: sessionId,
-    timestamp: new Date()
-  });
-
-  input.value = "";
+  try {
+    await addDoc(collection(db, "messages"), {
+      senderId: auth.currentUser.uid,
+      receiverId: conversationId.replace(auth.currentUser.uid, "").replace("-", ""),
+      conversationId: conversationId,
+      text: text,
+      timestamp: new Date()
+    });
+    input.value = "";
+  } catch (err) {
+    console.error(err);
+  }
 }
 
-// Listen for chat messages in real-time
-if (document.getElementById("messages")) {
-  const sessionId = new URLSearchParams(window.location.search).get("sessionId");
-
-  db.collection("messages")
-    .where("sessionId", "==", sessionId)
-    .orderBy("timestamp")
-    .onSnapshot(snapshot => {
-      const container = document.getElementById("messages");
-      container.innerHTML = "";
-      snapshot.forEach(doc => {
-        const data = doc.data();
-        const div = document.createElement("div");
-        div.className = "message " + ((data.sender === localStorage.getItem("waveXUser")) ? "sent" : "received");
-        div.innerText = data.text;
-        container.appendChild(div);
-        container.scrollTop = container.scrollHeight;
-      });
+// Real-time listener
+if (messagesContainer && conversationId) {
+  const q = query(collection(db, "messages"), where("conversationId", "==", conversationId), orderBy("timestamp"));
+  onSnapshot(q, snapshot => {
+    messagesContainer.innerHTML = "";
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const div = document.createElement("div");
+      div.className = "message " + (data.senderId === auth.currentUser.uid ? "sent" : "received");
+      div.innerText = data.text;
+      messagesContainer.appendChild(div);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
     });
+  });
 }
 
