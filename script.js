@@ -1,4 +1,3 @@
-
 // ===== LOGIN =====
 function login() {
     const name = document.getElementById("username").value.trim();
@@ -126,3 +125,19 @@ if (document.getElementById("messages")) {
           });
       });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
