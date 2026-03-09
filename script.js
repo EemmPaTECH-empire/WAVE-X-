@@ -53,8 +53,8 @@ function cancelSelection() {
 function proceedConnection(type, name) {
     const user = localStorage.getItem("waveXUser") || "Anonymous";
     // Generate the secret email submission link
-    const secretLink = `https://eemmpatech-empire.github.io/submit-email.html?user=${encodeURIComponent(user)}&contact=${encodeURIComponent(name)}`;
-    const message = `Hello ${name},\nSomeone wants to connect privately via WAVE X 🌊.\nPlease submit your email using this link to start a private conversation:\n${secretLink}`;
+    const secretLink = `https://eemmpatech-empire.github.io/WAVE-X-/submit-email.html?user=${encodeURIComponent(user)}&contact=${encodeURIComponent(name)}`;
+    const message = `Hello ${name},\nSomeone wants to connect privately with you via WAVE X 🌊.\nPlease submit your email using this link to start a private conversation:\n${secretLink}`;
 
     if (type === "whatsapp") {
         window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
