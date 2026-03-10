@@ -1,8 +1,8 @@
-// ===============================
+// ==========================
 // LOGIN
-// ===============================
+// ==========================
 
-function login() {
+function login(){
 
 const name = document.getElementById("username").value;
 const pass = document.getElementById("passcode").value;
@@ -25,11 +25,9 @@ window.location.href="connect.html";
 
 }
 
-
-
-// ===============================
+// ==========================
 // PAGE LOAD
-// ===============================
+// ==========================
 
 window.onload = function(){
 
@@ -49,81 +47,74 @@ initChatListener();
 
 }
 
-
-
-// ===============================
+// ==========================
 // CONTACT SELECTION
-// ===============================
+// ==========================
 
 function selectContact(type){
 
-const contactName = prompt(`Enter the name of the ${type} contact:`);
+const contactName = prompt(Enter the name of the ${type} contact:);
 
 if(!contactName) return;
 
 const div = document.getElementById("contact-selection");
 
 div.innerHTML = `
-<p>You selected: <strong>${contactName}</strong></p>
-<p>Do you wish to connect with <strong>${contactName}</strong>?</p>
-<button onclick="cancelSelection()">Cancel</button>
-<button onclick="proceedConnection('${type}','${contactName}')">Proceed</button>
-`;
 
-}
-
+<p>You selected: <strong>${contactName}</strong></p>  
+<p>Do you wish to connect with <strong>${contactName}</strong>?</p>  
+<button onclick="cancelSelection()">Cancel</button>  
+<button onclick="proceedConnection('${type}','${contactName}')">Proceed</button>  
+`;  }
 
 function cancelSelection(){
 document.getElementById("contact-selection").innerHTML="";
 }
 
-
-
-// ===============================
+// ==========================
 // CREATE PRIVATE ROOM
-// ===============================
+// ==========================
 
 function proceedConnection(type,name){
 
 const user = localStorage.getItem("waveXUser") || "Anonymous";
 
-const roomId =
-Math.random().toString(36).substring(2,10);
+const roomId = crypto.randomUUID();
 
 const secretLink =
-`https://eemmpatech-empire.github.io/WAVE-X-/submit-email.html?room=${roomId}&user=${encodeURIComponent(user)}&contact=${encodeURIComponent(name)}`;
+https://eemmpatech-empire.github.io/WAVE-X-/submit-email.html?room=${roomId}&user=${encodeURIComponent(user)}&contact=${encodeURIComponent(name)};
 
 const message =
 `Hello ${name},
 Someone wants to connect privately with you via WAVE X 🌊.
 
-Open this secret link to start a private conversation:
+Open this link to start the private conversation:
 ${secretLink}`;
 
 if(type==="whatsapp"){
-window.open(`https://wa.me/?text=${encodeURIComponent(message)}`,"_blank");
+window.open(https://wa.me/?text=${encodeURIComponent(message)},"_blank");
 }
 
 else if(type==="email"){
-window.location.href=`mailto:?subject=WAVE X Private Chat&body=${encodeURIComponent(message)}`;
+window.location.href=mailto:?subject=WAVE X Private Chat&body=${encodeURIComponent(message)};
 }
 
 else if(type==="phone"){
-alert(`Send this message to ${name}:\n\n${message}`);
+alert(Send this message to ${name}:\n\n${message});
 }
 
+// sender automatically enters chat
+window.location.href=secret-box.html?room=${roomId}&user=${encodeURIComponent(user)};
+
 }
 
-
-
-// ===============================
+// ==========================
 // SUBMIT EMAIL
-// ===============================
+// ==========================
 
 function submitEmail(){
 
-const email =
-document.getElementById("user-email").value.trim();
+const email = document.getElementById("user-email").value.trim();
 
 if(!email){
 alert("Enter your email.");
@@ -141,7 +132,6 @@ localStorage.getItem("waveXUser") ||
 
 const contact = params.get("contact") || "Unknown";
 
-
 db.collection("emails").add({
 
 sender:sender,
@@ -150,40 +140,36 @@ email:email,
 timestamp:new Date()
 
 })
-
 .then(()=>{
 
-alert("Email submitted! Redirecting to secret chat...");
-
 window.location.href =
-`secret-box.html?room=${room}&user=${encodeURIComponent(sender)}`;
+secret-box.html?room=${room}&user=${encodeURIComponent(email)};
 
 })
-
 .catch(err=>{
-
 console.error(err);
-
 alert("Error saving email.");
-
 });
 
 }
 
-
-
-// ===============================
+// ==========================
 // CHAT SYSTEM
-// ===============================
+// ==========================
 
 const urlParams = new URLSearchParams(window.location.search);
 
 const roomId = urlParams.get("room");
 
-let currentUser =
-urlParams.get("user") ||
-localStorage.getItem("waveXUser") ||
-"Anonymous";
+let currentUser;
+
+const linkUser = urlParams.get("user");
+
+if(linkUser){
+currentUser = linkUser;
+}else{
+currentUser = localStorage.getItem("waveXUser") || "Anonymous";
+}
 
 let messagesRef;
 
@@ -196,18 +182,13 @@ db.collection("rooms")
 
 }
 
-
-
-// ===============================
+// ==========================
 // REALTIME CHAT LISTENER
-// ===============================
+// ==========================
 
 function initChatListener(){
 
-if(!roomId) return;
-
-const container =
-document.getElementById("messages");
+const container = document.getElementById("messages");
 
 messagesRef
 .orderBy("timestamp")
@@ -219,8 +200,7 @@ snapshot.forEach(doc=>{
 
 const msg = doc.data();
 
-const div =
-document.createElement("div");
+const div = document.createElement("div");
 
 div.className =
 "message " +
@@ -229,5 +209,175 @@ div.className =
 if(msg.text){
 
 div.innerHTML =
-`<b>${msg.sender}</b><br>${msg
+<b>${msg.sender}</b><br>${msg.text};
+
 }
+
+if(msg.image){
+
+div.innerHTML =
+<b>${msg.sender}</b><br>   <img src="${msg.image}" style="max-width:200px;border-radius:10px;">;
+
+}
+
+if(msg.voice){
+
+div.innerHTML =
+<b>${msg.sender}</b><br>   <audio controls src="${msg.voice}"></audio>;
+
+}
+
+container.appendChild(div);
+
+});
+
+container.scrollTop = container.scrollHeight;
+
+});
+
+}
+
+// ==========================
+// SEND MESSAGE
+// ==========================
+
+function sendMessage(){
+
+const input = document.getElementById("chat-message");
+
+const text = input.value.trim();
+
+if(!text) return;
+
+messagesRef.add({
+
+text:text,
+sender:currentUser,
+timestamp:Date.now()
+
+});
+
+input.value="";
+
+}
+
+// ==========================
+// IMAGE UPLOAD
+// ==========================
+
+function uploadImage(){
+
+const fileInput = document.createElement("input");
+
+fileInput.type="file";
+
+fileInput.accept="image/*";
+
+fileInput.onchange = function(e){
+
+const file = e.target.files[0];
+
+const reader = new FileReader();
+
+reader.onload=function(){
+
+messagesRef.add({
+
+image:reader.result,
+sender:currentUser,
+timestamp:Date.now()
+
+});
+
+};
+
+reader.readAsDataURL(file);
+
+};
+
+fileInput.click();
+
+}
+
+// ==========================
+// VOICE MESSAGE
+// ==========================
+
+let recorder;
+let audioChunks=[];
+
+function recordVoice(){
+
+navigator.mediaDevices.getUserMedia({audio:true})
+.then(stream=>{
+
+recorder = new MediaRecorder(stream);
+
+recorder.start();
+
+audioChunks=[];
+
+alert("Recording voice... click OK to stop.");
+
+recorder.ondataavailable=e=>{
+audioChunks.push(e.data);
+};
+
+setTimeout(()=>{
+
+recorder.stop();
+
+},4000);
+
+recorder.onstop=()=>{
+
+const blob = new Blob(audioChunks);
+
+const reader = new FileReader();
+
+reader.onload=()=>{
+
+messagesRef.add({
+
+voice:reader.result,
+sender:currentUser,
+timestamp:Date.now()
+
+});
+
+};
+
+reader.readAsDataURL(blob);
+
+};
+
+});
+
+}
+
+// ==========================
+// EMOJI SUPPORT
+// ==========================
+
+function addEmoji(emoji){
+
+const input = document.getElementById("chat-message");
+
+input.value += emoji;
+
+}
+
+// ==========================
+// TEMPORARY SECRET CHAT
+// ==========================
+
+if(roomId){
+
+setTimeout(()=>{
+
+db.collection("rooms").doc(roomId).delete();
+
+},86400000); // 24 hours
+
+}
+
