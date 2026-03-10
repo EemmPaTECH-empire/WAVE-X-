@@ -45,9 +45,9 @@ if(el) el.innerText=user;
 
 
 // =========================
-if(document.getElementById("messages")){
-initChatListener();
-}
+// if(document.getElementById("messages")){
+// initChatListener();
+// }
 // =========================
 
 if(document.getElementById("messages")){
