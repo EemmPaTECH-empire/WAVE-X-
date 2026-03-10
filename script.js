@@ -109,7 +109,7 @@ window.location.href=`mailto:?subject=WAVE X Private Chat&body=${encodeURICompon
 }
 
 else if(type==="phone"){
-alert(`Send this message to ${name}:\n\n${message}`);
+window.open(`https://wa.me/?text=${encodeURIComponent(message)}`,"_blank");
 }
 
 }
