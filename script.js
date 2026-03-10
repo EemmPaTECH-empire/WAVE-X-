@@ -1,27 +1,3 @@
-// ==========================
-// FIREBASE
-// ==========================
-
-const db = firebase.firestore();
-
-
-
-// ==========================
-// ENABLE NOTIFICATIONS
-// ==========================
-
-if ("Notification" in window) {
-
-Notification.requestPermission().then(permission => {
-
-if(permission === "granted"){
-console.log("Notifications enabled");
-}
-
-});
-
-}
-
 
 
 // ==========================
@@ -72,6 +48,30 @@ if(el) el.innerText=user;
 if(document.getElementById("messages")){
 initChatListener();
 }
+
+}
+
+// ==========================
+// FIREBASE
+// ==========================
+
+const db = firebase.firestore();
+
+
+
+// ==========================
+// ENABLE NOTIFICATIONS
+// ==========================
+
+if ("Notification" in window) {
+
+Notification.requestPermission().then(permission => {
+
+if(permission === "granted"){
+console.log("Notifications enabled");
+}
+
+});
 
 }
 
