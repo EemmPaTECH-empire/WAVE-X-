@@ -319,6 +319,11 @@ container.scrollTop = container.scrollHeight;
 // SEND MESSAGE
 // ==========================
 
+
+
+
+
+
 function sendMessage(){
 
 const input = document.getElementById("chat-message");
@@ -335,9 +340,27 @@ timestamp:Date.now()
 
 });
 
+// SEND NOTIFICATION
+const title = "WAVE X 🌊";
+const body = `${currentUser}: ${text}`;
+
+if(Notification.permission === "granted"){
+
+new Notification(title,{
+body:body,
+icon:"/icon.png"
+});
+
+}
+
 input.value="";
 
 }
+
+
+
+
+
 
 
 
