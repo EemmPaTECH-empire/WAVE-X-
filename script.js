@@ -130,29 +130,6 @@ window.location.href=`secret-box.html?room=${roomId}&user=${encodeURIComponent(u
 
 
 
-// ==========================
-// ROOM ACCESS CONTROL (2 USERS ONLY)
-// ==========================
-
-function registerParticipant(){
-
-if(!roomId) return;
-
-const roomRef = db.collection("rooms").doc(roomId);
-
-roomRef.get().then(doc=>{
-
-if(!doc.exists){
-
-// create room
-roomRef.set({
-participants:[currentUser],
-created:Date.now()
-});
-
-return;
-
-}
 
 const data = doc.data();
 
