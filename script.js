@@ -1,7 +1,5 @@
 
 
-
-
 // ==========================
 // LOGIN
 // ==========================
@@ -243,6 +241,9 @@ container.scrollTop = container.scrollHeight;
 
 }
 
+
+
+
 // ==========================
 // SEND MESSAGE
 // ==========================
@@ -264,56 +265,9 @@ timestamp:Date.now()
 
 });
 
-// SEND NOTIFICATION
-const title = "WAVE X 🌊";
-const body = `${currentUser}: ${text}`;
-
-if(Notification.permission === "granted"){
-
-new Notification(title,{
-body:body,
-icon:"/icon.png"
-});
-
-}
-
 input.value="";
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-//function sendMessage(){
-
-//const input = document.getElementById("chat-message");
-
-//const text = input.value.trim();
-
-//if(!text) return;
-
-//messagesRef.add({
-
-//text:text,
-//sender:currentUser,
-//timestamp:Date.now()
-
-//});
-
-//input.value="";
-
-//}
-
-
-
 
 
 
