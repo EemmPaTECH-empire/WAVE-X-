@@ -1,4 +1,30 @@
 // ==========================
+// FIREBASE
+// ==========================
+
+const db = firebase.firestore();
+
+
+
+// ==========================
+// ENABLE NOTIFICATIONS
+// ==========================
+
+if ("Notification" in window) {
+
+Notification.requestPermission().then(permission => {
+
+if(permission === "granted"){
+console.log("Notifications enabled");
+}
+
+});
+
+}
+
+
+
+// ==========================
 // LOGIN
 // ==========================
 
@@ -219,28 +245,38 @@ div.className =
 "message " +
 (msg.sender===currentUser ? "sent":"received");
 
+let content = `<b>${msg.sender}</b><br>`;
+
+// TEXT
 if(msg.text){
-
-div.innerHTML =
-`<b>${msg.sender}</b><br>${msg.text}`;
-
+content += msg.text + "<br>";
 }
 
+// IMAGE
 if(msg.image){
-
-div.innerHTML =
-`<b>${msg.sender}</b><br>
-<img src="${msg.image}" style="max-width:200px;border-radius:10px;">`;
-
+content += `<img src="${msg.image}" style="max-width:200px;border-radius:10px;"><br>`;
 }
 
+// VOICE
 if(msg.voice){
+content += `<audio controls src="${msg.voice}"></audio><br>`;
+}
 
-div.innerHTML =
-`<b>${msg.sender}</b><br>
-<audio controls src="${msg.voice}"></audio>`;
+// TIMESTAMP
+if(msg.timestamp){
+
+const time = new Date(msg.timestamp);
+
+const timeString = time.toLocaleTimeString([],{
+hour:"2-digit",
+minute:"2-digit"
+});
+
+content += `<span style="font-size:11px;opacity:0.6">${timeString}</span>`;
 
 }
+
+div.innerHTML = content;
 
 container.appendChild(div);
 
@@ -273,6 +309,15 @@ sender:currentUser,
 timestamp:Date.now()
 
 });
+
+// browser notification
+if(Notification.permission === "granted"){
+
+new Notification("WAVE X 🌊",{
+body: currentUser + ": " + text
+});
+
+}
 
 input.value="";
 
@@ -338,7 +383,7 @@ recorder.start();
 
 audioChunks=[];
 
-alert("Recording voice... click OK to stop.");
+alert("Recording voice...");
 
 recorder.ondataavailable=e=>{
 audioChunks.push(e.data);
@@ -348,11 +393,11 @@ setTimeout(()=>{
 
 recorder.stop();
 
-},4000);
+},5000);
 
 recorder.onstop=()=>{
 
-const blob = new Blob(audioChunks);
+const blob = new Blob(audioChunks,{type:"audio/webm"});
 
 const reader = new FileReader();
 
@@ -402,7 +447,6 @@ setTimeout(()=>{
 
 db.collection("rooms").doc(roomId).delete();
 
-},86400000); // 24 hours
+},86400000); // 98 hours
 
 }
-
