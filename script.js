@@ -1,5 +1,3 @@
-
-
 // ==========================
 // LOGIN
 // ==========================
@@ -26,8 +24,6 @@ localStorage.setItem("waveXUser",name);
 window.location.href="connect.html";
 
 }
-
-
 
 // ==========================
 // PAGE LOAD
@@ -241,13 +237,9 @@ container.scrollTop = container.scrollHeight;
 
 }
 
-
-
-
 // ==========================
 // SEND MESSAGE
 // ==========================
-
 
 function sendMessage(){
 
@@ -268,9 +260,6 @@ timestamp:Date.now()
 input.value="";
 
 }
-
-
-
 
 // ==========================
 // IMAGE UPLOAD
@@ -391,3 +380,4 @@ db.collection("rooms").doc(roomId).delete();
 },86400000); // 24 hours
 
 }
+
