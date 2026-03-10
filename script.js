@@ -453,6 +453,31 @@ input.value += emoji;
 
 
 
+
+
+
+// ==========================
+// ENABLE NOTIFICATIONS
+// ==========================
+
+if ("Notification" in window) {
+
+Notification.requestPermission().then(permission => {
+
+if(permission === "granted"){
+console.log("Notifications enabled");
+}
+
+});
+
+}
+
+
+
+
+
+
+
 // ==========================
 // TEMPORARY SECRET CHAT
 // ==========================
