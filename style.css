@@ -205,6 +205,21 @@ margin-right:auto;
   background:#FFD700;
   color:#000;
   font-weight:bold;
+
+
+
+
+.chat-input button{
+margin:4px;
+border:none;
+background:none;
+font-size:20px;
+cursor:pointer;
+}
+
+
+
+
 }
 .chat-input button:hover{
   transform:scale(1.05);
