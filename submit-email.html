@@ -1,30 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Submit Email - WAVE X 🌊</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
+function submitEmail() {
 
-<main class="dashboard">
-  <h2>Submit Your Email</h2>
-  <p>Enter your email to start a private conversation:</p>
+const email = document.getElementById("user-email").value.trim();
 
-  <input type="email" id="user-email" placeholder="Enter Your Email">
-  <button onclick="submitEmail()">Submit</button>
-</main>
+if (!email) {
+alert("Enter your email.");
+return;
+}
 
-<footer class="minimal-footer">
-  Powered by BMT Mobile
-</footer>
+const urlParams = new URLSearchParams(window.location.search);
 
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-<script src="firebase-config.js"></script>
-<script src="script.js"></script>
+const sender = urlParams.get("user") || localStorage.getItem("waveXUser") || "Anonymous";
 
-</body>
-</html>
+const contact = urlParams.get("contact") || "Unknown";
+
+db.collection("emails").add({
+sender: sender,
+contact: contact,
+email: email,
+timestamp: new Date()
+})
+.then(() => {
+
+alert("Email submitted! Redirecting to secret conversation...");
+
+window.location.href = "secret-box.html?user=" + encodeURIComponent(sender);
+
+})
+.catch(err => {
+
+console.error(err);
+
+alert("Error saving email.");
+
+});
+
+}
