@@ -331,9 +331,6 @@ container.scrollTop = container.scrollHeight;
 
 
 
-
-
-
 function sendMessage(){
 
 const input = document.getElementById("chat-message");
@@ -343,12 +340,33 @@ const text = input.value.trim();
 if(!text) return;
 
 messagesRef.add({
-
 text:text,
 sender:currentUser,
 timestamp:Date.now()
+})
+.then(()=>{
 
+// clear input properly
+input.value="";
+input.focus();
+
+})
+.catch(err=>{
+console.error(err);
 });
+
+
+// browser notification
+if(Notification.permission === "granted"){
+new Notification("WAVE X 🌊",{
+body: currentUser + ": " + text
+});
+}
+
+}
+
+
+
 
 // SEND NOTIFICATION
 const title = "WAVE X 🌊";
