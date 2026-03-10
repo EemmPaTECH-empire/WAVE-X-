@@ -117,6 +117,67 @@ window.location.href=`secret-box.html?room=${roomId}&user=${encodeURIComponent(u
 
 
 
+
+
+
+// ==========================
+// ROOM ACCESS CONTROL (2 USERS ONLY)
+// ==========================
+
+function registerParticipant(){
+
+if(!roomId) return;
+
+const roomRef = db.collection("rooms").doc(roomId);
+
+roomRef.get().then(doc=>{
+
+if(!doc.exists){
+
+// create room
+roomRef.set({
+participants:[currentUser],
+created:Date.now()
+});
+
+return;
+
+}
+
+const data = doc.data();
+
+let participants = data.participants || [];
+
+if(participants.includes(currentUser)){
+return;
+}
+
+if(participants.length >= 2){
+
+alert("This private room is full.");
+
+window.location.href="index.html";
+
+return;
+
+}
+
+participants.push(currentUser);
+
+roomRef.update({
+participants:participants
+});
+
+});
+
+}
+
+
+
+
+
+
+
 // ==========================
 // SUBMIT EMAIL
 // ==========================
