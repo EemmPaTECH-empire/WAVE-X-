@@ -264,6 +264,54 @@ listenTyping();
 
 }
 
+// ROOM SECURITY
+
+const roomRef = db.collection("rooms").doc(roomId);
+
+roomRef.get().then(doc => {
+
+if(!doc.exists){
+
+// First user creates the room
+
+roomRef.set({
+creator: currentUser,
+participants:[currentUser],
+created: Date.now()
+});
+
+}
+
+else{
+
+let data = doc.data();
+
+let participants = data.participants || [];
+
+if(!participants.includes(currentUser)){
+
+if(participants.length >= 2){
+
+alert("This private chat already has two participants.");
+
+window.location.href = "connect.html";
+
+return;
+
+}
+
+participants.push(currentUser);
+
+roomRef.update({
+participants:participants
+});
+
+}
+
+}
+
+});
+
 
 
 // ===============================
