@@ -402,6 +402,6 @@ setTimeout(()=>{
 
 db.collection("rooms").doc(roomId).delete();
 
-},86400000); // 98 hours
+},86400000); // 24 hours
 
 }
