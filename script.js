@@ -1,5 +1,3 @@
-
-
 // ==========================
 // LOGIN
 // ==========================
@@ -48,30 +46,6 @@ if(el) el.innerText=user;
 if(document.getElementById("messages")){
 initChatListener();
 }
-
-}
-
-// ==========================
-// FIREBASE
-// ==========================
-
-const db = firebase.firestore();
-
-
-
-// ==========================
-// ENABLE NOTIFICATIONS
-// ==========================
-
-if ("Notification" in window) {
-
-Notification.requestPermission().then(permission => {
-
-if(permission === "granted"){
-console.log("Notifications enabled");
-}
-
-});
 
 }
 
@@ -245,38 +219,28 @@ div.className =
 "message " +
 (msg.sender===currentUser ? "sent":"received");
 
-let content = `<b>${msg.sender}</b><br>`;
-
-// TEXT
 if(msg.text){
-content += msg.text + "<br>";
+
+div.innerHTML =
+`<b>${msg.sender}</b><br>${msg.text}`;
+
 }
 
-// IMAGE
 if(msg.image){
-content += `<img src="${msg.image}" style="max-width:200px;border-radius:10px;"><br>`;
+
+div.innerHTML =
+`<b>${msg.sender}</b><br>
+<img src="${msg.image}" style="max-width:200px;border-radius:10px;">`;
+
 }
 
-// VOICE
 if(msg.voice){
-content += `<audio controls src="${msg.voice}"></audio><br>`;
-}
 
-// TIMESTAMP
-if(msg.timestamp){
-
-const time = new Date(msg.timestamp);
-
-const timeString = time.toLocaleTimeString([],{
-hour:"2-digit",
-minute:"2-digit"
-});
-
-content += `<span style="font-size:11px;opacity:0.6">${timeString}</span>`;
+div.innerHTML =
+`<b>${msg.sender}</b><br>
+<audio controls src="${msg.voice}"></audio>`;
 
 }
-
-div.innerHTML = content;
 
 container.appendChild(div);
 
@@ -309,15 +273,6 @@ sender:currentUser,
 timestamp:Date.now()
 
 });
-
-// browser notification
-if(Notification.permission === "granted"){
-
-new Notification("WAVE X 🌊",{
-body: currentUser + ": " + text
-});
-
-}
 
 input.value="";
 
@@ -383,7 +338,7 @@ recorder.start();
 
 audioChunks=[];
 
-alert("Recording voice...");
+alert("Recording voice... click OK to stop.");
 
 recorder.ondataavailable=e=>{
 audioChunks.push(e.data);
@@ -393,11 +348,11 @@ setTimeout(()=>{
 
 recorder.stop();
 
-},5000);
+},4000);
 
 recorder.onstop=()=>{
 
-const blob = new Blob(audioChunks,{type:"audio/webm"});
+const blob = new Blob(audioChunks);
 
 const reader = new FileReader();
 
