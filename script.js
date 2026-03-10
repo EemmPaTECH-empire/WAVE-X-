@@ -31,39 +31,6 @@ window.location.href="connect.html";
 
 
 
-
-
-
-
-// ==========================
-// ENABLE NOTIFICATIONS
-// ==========================
-
-if ("Notification" in window) {
-
-Notification.requestPermission().then(permission => {
-
-if(permission === "granted"){
-
-messaging.getToken().then(token=>{
-
-localStorage.setItem("waveXToken",token);
-
-});
-
-}
-
-});
-
-}
-
-
-
-
-
-
-
-
 // ==========================
 // PAGE LOAD
 // ==========================
