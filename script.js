@@ -1,3 +1,7 @@
+
+
+
+
 // ==========================
 // LOGIN
 // ==========================
@@ -25,6 +29,8 @@ window.location.href="connect.html";
 
 }
 
+
+
 // ==========================
 // PAGE LOAD
 // ==========================
@@ -47,29 +53,34 @@ initChatListener();
 
 }
 
+
+
 // ==========================
 // CONTACT SELECTION
 // ==========================
 
 function selectContact(type){
 
-const contactName = prompt(Enter the name of the ${type} contact:);
+const contactName = prompt(`Enter the name of the ${type} contact:`);
 
 if(!contactName) return;
 
 const div = document.getElementById("contact-selection");
 
 div.innerHTML = `
+<p>You selected: <strong>${contactName}</strong></p>
+<p>Do you wish to connect with <strong>${contactName}</strong>?</p>
+<button onclick="cancelSelection()">Cancel</button>
+<button onclick="proceedConnection('${type}','${contactName}')">Proceed</button>
+`;
 
-<p>You selected: <strong>${contactName}</strong></p>  
-<p>Do you wish to connect with <strong>${contactName}</strong>?</p>  
-<button onclick="cancelSelection()">Cancel</button>  
-<button onclick="proceedConnection('${type}','${contactName}')">Proceed</button>  
-`;  }
+}
 
 function cancelSelection(){
 document.getElementById("contact-selection").innerHTML="";
 }
+
+
 
 // ==========================
 // CREATE PRIVATE ROOM
@@ -82,7 +93,7 @@ const user = localStorage.getItem("waveXUser") || "Anonymous";
 const roomId = crypto.randomUUID();
 
 const secretLink =
-https://eemmpatech-empire.github.io/WAVE-X-/submit-email.html?room=${roomId}&user=${encodeURIComponent(user)}&contact=${encodeURIComponent(name)};
+`https://eemmpatech-empire.github.io/WAVE-X-/submit-email.html?room=${roomId}&user=${encodeURIComponent(user)}&contact=${encodeURIComponent(name)}`;
 
 const message =
 `Hello ${name},
@@ -92,21 +103,23 @@ Open this link to start the private conversation:
 ${secretLink}`;
 
 if(type==="whatsapp"){
-window.open(https://wa.me/?text=${encodeURIComponent(message)},"_blank");
+window.open(`https://wa.me/?text=${encodeURIComponent(message)}`,"_blank");
 }
 
 else if(type==="email"){
-window.location.href=mailto:?subject=WAVE X Private Chat&body=${encodeURIComponent(message)};
+window.location.href=`mailto:?subject=WAVE X Private Chat&body=${encodeURIComponent(message)}`;
 }
 
 else if(type==="phone"){
-alert(Send this message to ${name}:\n\n${message});
+alert(`Send this message to ${name}:\n\n${message}`);
 }
 
 // sender automatically enters chat
-window.location.href=secret-box.html?room=${roomId}&user=${encodeURIComponent(user)};
+window.location.href=`secret-box.html?room=${roomId}&user=${encodeURIComponent(user)}`;
 
 }
+
+
 
 // ==========================
 // SUBMIT EMAIL
@@ -143,7 +156,7 @@ timestamp:new Date()
 .then(()=>{
 
 window.location.href =
-secret-box.html?room=${room}&user=${encodeURIComponent(email)};
+`secret-box.html?room=${room}&user=${encodeURIComponent(email)}`;
 
 })
 .catch(err=>{
@@ -152,6 +165,8 @@ alert("Error saving email.");
 });
 
 }
+
+
 
 // ==========================
 // CHAT SYSTEM
@@ -182,6 +197,8 @@ db.collection("rooms")
 
 }
 
+
+
 // ==========================
 // REALTIME CHAT LISTENER
 // ==========================
@@ -209,21 +226,23 @@ div.className =
 if(msg.text){
 
 div.innerHTML =
-<b>${msg.sender}</b><br>${msg.text};
+`<b>${msg.sender}</b><br>${msg.text}`;
 
 }
 
 if(msg.image){
 
 div.innerHTML =
-<b>${msg.sender}</b><br>   <img src="${msg.image}" style="max-width:200px;border-radius:10px;">;
+`<b>${msg.sender}</b><br>
+<img src="${msg.image}" style="max-width:200px;border-radius:10px;">`;
 
 }
 
 if(msg.voice){
 
 div.innerHTML =
-<b>${msg.sender}</b><br>   <audio controls src="${msg.voice}"></audio>;
+`<b>${msg.sender}</b><br>
+<audio controls src="${msg.voice}"></audio>`;
 
 }
 
@@ -236,6 +255,8 @@ container.scrollTop = container.scrollHeight;
 });
 
 }
+
+
 
 // ==========================
 // SEND MESSAGE
@@ -260,6 +281,8 @@ timestamp:Date.now()
 input.value="";
 
 }
+
+
 
 // ==========================
 // IMAGE UPLOAD
@@ -298,6 +321,8 @@ reader.readAsDataURL(file);
 fileInput.click();
 
 }
+
+
 
 // ==========================
 // VOICE MESSAGE
@@ -355,6 +380,8 @@ reader.readAsDataURL(blob);
 
 }
 
+
+
 // ==========================
 // EMOJI SUPPORT
 // ==========================
@@ -366,6 +393,8 @@ const input = document.getElementById("chat-message");
 input.value += emoji;
 
 }
+
+
 
 // ==========================
 // TEMPORARY SECRET CHAT
@@ -380,3 +409,4 @@ db.collection("rooms").doc(roomId).delete();
 },86400000); // 24 hours
 
 }
+
